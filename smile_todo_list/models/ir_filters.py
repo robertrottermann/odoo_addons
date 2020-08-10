@@ -38,7 +38,6 @@ class IrFiltersCategory(models.Model):
 class IrFilters(models.Model):
     _inherit = 'ir.filters'
 
-    @api.multi
     def _get_domain_and_context(self):
         self.ensure_one()
         localdict = {
@@ -53,7 +52,6 @@ class IrFilters(models.Model):
         domain = eval(self.domain, localdict)
         return domain, context
 
-    @api.one
     def _get_count(self):
         domain, context = self._get_domain_and_context()
         self.count = self.env[self.model_id].with_context(
@@ -82,7 +80,6 @@ class IrFilters(models.Model):
                 [('id', '=', values.get('action_id'))]).id or False
         return super(IrFilters, self).create(values)
 
-    @api.multi
     def view_details(self):
         self.ensure_one()
         domain, context = self._get_domain_and_context()
@@ -108,7 +105,6 @@ class IrFilters(models.Model):
         return self.env[self.model_id].with_context(
             context).browse().open_wizard(**kwargs)
 
-    @api.multi
     def _read_group_category_ids(self, domain, **kwargs):
         categories = self.env['ir.filters.category'].search([])
         return categories.name_get(), \
